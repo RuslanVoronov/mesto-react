@@ -1,13 +1,14 @@
-function ImagePopup() {
-    return (<section className="popup image-popup" id="image-popup">
-        <div className="image-popup__content">
+function ImagePopup(props) {
+    if (props.card) {
+        return (<section className={`${props.card ? 'popup popup_opened' : 'popup'}`} id="image-popup">
+            <div className="image-popup__content">
+                <img src={props.card.link} alt="" className="image-popup__image" />
+                <p className="image-popup__name">{props.card.name}</p>
 
-            <img src="#" alt="" className="image-popup__image" />
-            <p className="image-popup__name"></p>
-
-            <button className="popup__close-button" type="button"></button>
-        </div>
-    </section>);
+                <button onClick={props.onClose} className="popup__close-button" type="button"></button>
+            </div>
+        </section>);
+    }
 }
 
 export default ImagePopup

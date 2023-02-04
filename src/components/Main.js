@@ -1,4 +1,26 @@
+import api from '../utils/Api';
+import Card from './Card';
+import { useEffect, useState } from "react";
 function Main(props) {
+    const [userName, setUserName] = useState('Загрузка');
+    const [userDescription, setUserDescription] = useState('Загрузка');
+    const [userAvatar, setUserAvatar] = useState('');
+    const [cards, setCards] = useState([]);
+    useEffect(() => {
+        api.getUserInfo()
+            .then((res) => {
+                setUserName(res.name)
+                setUserDescription(res.about)
+                setUserAvatar(res.avatar)
+            })
+    }, []);
+
+    useEffect(() => {
+        api.getInitialCards()
+            .then((res) => {
+                setCards(res)
+            })
+    }, []);
 
     return (
         <main>
@@ -6,12 +28,12 @@ function Main(props) {
             <section className="profile">
                 <div className="profile__content">
                     <div className="profile__avatar">
-                        <img src="#" alt="Аватар" className="profile__avatar-image" />
+                        <img src={userAvatar} alt="Аватар" className="profile__avatar-image" />
                         <div onClick={props.onEditAvatar} className="profile__avatar-overlay"></div>
                     </div>
                     <div className="profile-info">
-                        <h1 className="profile-info__title"></h1>
-                        <p className="profile-info__subtitle"></p>
+                        <h1 className="profile-info__title">{userName}</h1>
+                        <p className="profile-info__subtitle">{userDescription}</p>
                         <button onClick={props.onEditProfile} className="profile-info__edit-button" type="button"></button>
                     </div>
                 </div>
@@ -20,6 +42,11 @@ function Main(props) {
 
             {/*  elements */}
             <section className="elements">
+                {
+                    cards.map((card) => {
+                        return <Card cardInfo={card} onCardClick={props.onCardClick} key={card._id} />
+                    })
+                }
             </section>
 
         </main >

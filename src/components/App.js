@@ -10,6 +10,7 @@ function App() {
   const [isProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
   const [isAddPlacePopupOpen, setIsCardPopupOpened] = useState(false);
   const [isEditAvatarPopupOpen, setIsAvatarPopupOpened] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   function handleEditAvatarClick() {
     setIsAvatarPopupOpened(!isEditAvatarPopupOpen)
@@ -27,15 +28,28 @@ function App() {
     setIsEditProfilePopupOpened(false);
     setIsCardPopupOpened(false);
     setIsAvatarPopupOpened(false);
+    setSelectedCard(false);
   }
+  // function handleEscClose(event) {
+  //   console.log(event.key)
+  //   if (event.key === 'Escape') {
+  //     closeAllPopups();
+  //   }
+  // }
 
   return (
     <div className="body">
       <div className="page">
         <Header />
-        <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} />
+        <Main
+          isOpen={isProfilePopupOpened}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={setSelectedCard}
+        />
         <Footer />
-        <ImagePopup />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
         {/*  popup profile */}
         <PopupWithForm name="profile" title="Редактировать профиль" onClose={closeAllPopups} isOpen={isProfilePopupOpened}>
@@ -67,28 +81,8 @@ function App() {
         </PopupWithForm>
 
         {/*  popup question */}
-        <section className="popup" id="question-popup">
-          <div className="popup__content">
-            <h2 className="popup__title">Вы уверены?</h2>
-            <button className="popup__save-button" id="question-btn" type="button">Да</button>
-            <button className="popup__close-button" type="button"></button>
-          </div>
-        </section>
+        <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} />
 
-        {/*  elements template */}
-        <template className="template">
-          <div className="element">
-            <img src="#" alt="" className="element__image" />
-            <button className="element__trash-button" type="button"></button>
-            <div className="element__description">
-              <h2 className="element__title"></h2>
-              <div className="like">
-                <button className="like__button" type="button"></button>
-                <h3 className="like__counter"></h3>
-              </div>
-            </div>
-          </div>
-        </template>
       </div>
     </div >
   );
