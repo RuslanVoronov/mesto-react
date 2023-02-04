@@ -28,7 +28,7 @@ function App() {
     setIsEditProfilePopupOpened(false);
     setIsCardPopupOpened(false);
     setIsAvatarPopupOpened(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
 
   return (
@@ -46,7 +46,8 @@ function App() {
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
         {/*  popup profile */}
-        <PopupWithForm name="profile" title="Редактировать профиль" onClose={closeAllPopups} isOpen={isProfilePopupOpened}>
+        <PopupWithForm name="profile" title="Редактировать профиль" onClose={closeAllPopups} isOpen={isProfilePopupOpened} buttonText="Сохранить">
+
           <input className="popup__input popup__input_type_name" id="name" name="name" minLength="2"
             maxLength="40" placeholder="Имя" required />
           <span className="popup__error" id="name-error"></span>
@@ -54,17 +55,18 @@ function App() {
           <input className="popup__input popup__input_type_job" id="job" name="about" minLength="2"
             maxLength="200" placeholder="Род деятельности" required />
           <span className="popup__error" id="job-error"></span>
+
         </PopupWithForm>
 
         {/*  popup update Avatar */}
-        <PopupWithForm name="avatar" title="Обновить аватар" onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen}>
+        <PopupWithForm name="avatar" title="Обновить аватар" onClose={closeAllPopups} isOpen={isEditAvatarPopupOpen} buttonText="Сохранить">
           <input className="popup__input popup__input_type_avatar" id="avatar" name="avatar"
             placeholder="Ссылка на картинку" type="url" required />
           <span className="popup__error" id="avatar-error"></span>
         </PopupWithForm>
 
         {/*  popup Card */}
-        <PopupWithForm name="card" title="Новое место" onClose={closeAllPopups} isOpen={isAddPlacePopupOpen}>
+        <PopupWithForm name="card" title="Новое место" onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} buttonText="Сохранить">
           <input className="popup__input popup__input_type_place" id="place" name="place" minLength="2"
             maxLength="30" placeholder="Название" required />
           <span className="popup__error" id="place-error"></span>
@@ -75,7 +77,7 @@ function App() {
         </PopupWithForm>
 
         {/*  popup question */}
-        <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} />
+        <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} buttonText="Да" />
 
       </div>
     </div >

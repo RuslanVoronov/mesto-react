@@ -13,6 +13,9 @@ function Main(props) {
                 setUserDescription(res.about)
                 setUserAvatar(res.avatar)
             })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            });
     }, []);
 
     useEffect(() => {
