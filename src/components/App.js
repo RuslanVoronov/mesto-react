@@ -30,12 +30,6 @@ function App() {
     setIsAvatarPopupOpened(false);
     setSelectedCard(false);
   }
-  // function handleEscClose(event) {
-  //   console.log(event.key)
-  //   if (event.key === 'Escape') {
-  //     closeAllPopups();
-  //   }
-  // }
 
   return (
     <div className="body">
@@ -81,7 +75,7 @@ function App() {
         </PopupWithForm>
 
         {/*  popup question */}
-        <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} />
+        <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} />
 
       </div>
     </div >
