@@ -23,6 +23,9 @@ function Main(props) {
             .then((res) => {
                 setCards(res)
             })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            });
     }, []);
 
     return (
