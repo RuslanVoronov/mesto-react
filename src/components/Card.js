@@ -12,6 +12,10 @@ function Card({ cardInfo, onCardClick, onCardLike, onCardDelete }) {
         onCardLike(cardInfo)
     }
 
+    function handleCardDelete() {
+        onCardDelete(cardInfo)
+    }
+
     const isOwn = cardInfo.owner._id === currentUser._id;
 
     // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
@@ -26,7 +30,7 @@ function Card({ cardInfo, onCardClick, onCardLike, onCardDelete }) {
     {/*  elements template */ }
     return (<div className="element">
         <img onClick={handleClick} src={cardInfo.link} alt={cardInfo.name} className="element__image" />
-        {isOwn && <button className="element__trash-button" onClick={onCardDelete} type="button" />}
+        {isOwn && <button className="element__trash-button" onClick={handleCardDelete} type="button" />}
 
         {/* <button className="element__trash-button" type="button"></button> */}
         <div className="element__description">

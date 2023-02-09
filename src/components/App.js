@@ -59,9 +59,10 @@ function App() {
 
   // Удаление карточки
   function handleCardDelete(card) {
-    api.deleteCard(card)
+    api.deleteCard(card._id)
       .then((res) => {
-        setCards(res)
+        const newCards = cards.filter((item) => item._id !== card._id);
+        setCards(newCards)
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
