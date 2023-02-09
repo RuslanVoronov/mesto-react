@@ -69,21 +69,26 @@ class Api {
             .then(this._checkServer)
     }
 
-    addLike(cardId) {
-        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-            method: "PUT",
-            headers: this._headers
-        })
-            .then(this._checkServer)
+    changeLikeCardStatus(cardId, isLiked) {
+
+        if (!isLiked) {
+            return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+                method: "PUT",
+                headers: this._headers
+            })
+                .then(this._checkServer)
+        }
+
+        {
+            return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+                method: "DELETE",
+                headers: this._headers
+            })
+                .then(this._checkServer)
+        };
+
     }
 
-    deleteLike(cardId) {
-        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-            method: "DELETE",
-            headers: this._headers
-        })
-            .then(this._checkServer)
-    }
 };
 
 const api = new Api({
