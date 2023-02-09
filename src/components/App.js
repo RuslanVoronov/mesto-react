@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/Api';
 import React from 'react';
 import { useState, useEffect } from "react";
@@ -18,6 +19,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsAvatarPopupOpened] = useState(false);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
+
   // Запрс карточек
   useEffect(() => {
     api.getInitialCards()
@@ -89,6 +91,18 @@ function App() {
     closeAllPopups()
   }
 
+  // Добавление новой карточки
+  function handleAddPlaceSubmit(data) {
+    api.addNewCard(data)
+      .then((res) => {
+        setCards([res, ...cards]);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+    closeAllPopups()
+  }
+
   // Переключение Попапов
   function handleEditAvatarClick() {
     setIsAvatarPopupOpened(!isEditAvatarPopupOpen)
@@ -120,8 +134,8 @@ function App() {
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
             onCardClick={setSelectedCard}
-            handleCardLike={handleCardLike}
-            handleCardDelete={handleCardDelete}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
             cards={cards}
           />
           <Footer />
@@ -131,16 +145,7 @@ function App() {
 
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
 
-          {/*  popup Card */}
-          <PopupWithForm name="card" title="Новое место" onClose={closeAllPopups} isOpen={isAddPlacePopupOpen} buttonText="Сохранить">
-            <input className="popup__input popup__input_type_place" id="place" name="place" minLength="2"
-              maxLength="30" placeholder="Название" required />
-            <span className="popup__error" id="place-error"></span>
-
-            <input className="popup__input popup__input_type_link" id="link" name="link"
-              placeholder="Ссылка на картинку" type="url" required />
-            <span className="popup__error" id="link-error"></span>
-          </PopupWithForm>
+          <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
 
           {/*  popup question */}
           <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} buttonText="Да" />

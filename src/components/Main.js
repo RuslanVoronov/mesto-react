@@ -1,7 +1,5 @@
-import api from '../utils/Api';
 import React from 'react';
 import Card from './Card';
-import { useEffect, useState } from "react";
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
@@ -30,7 +28,7 @@ function Main(props) {
             <section className="elements">
                 {
                     props.cards.map((card) => {
-                        return <Card cardInfo={card} onCardDelete={props.handleCardDelete} onCardLike={props.handleCardLike} onCardClick={props.onCardClick} key={card._id} />
+                        return <Card cardInfo={card} onCardDelete={props.onCardDelete} onCardLike={props.onCardLike} onCardClick={props.onCardClick} key={card._id} />
                     })
                 }
             </section>
