@@ -19,6 +19,23 @@ function App() {
   const [isEditAvatarPopupOpen, setIsAvatarPopupOpened] = useState(false);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const isOpen = isEditAvatarPopupOpen || isProfilePopupOpened || isAddPlacePopupOpen || selectedCard
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen]) 
+
 
   // Запрс карточек
   useEffect(() => {
@@ -61,8 +78,7 @@ function App() {
   function handleCardDelete(card) {
     api.deleteCard(card._id)
       .then((res) => {
-        const newCards = cards.filter((item) => item._id !== card._id);
-        setCards(newCards)
+        setCards((state) => state.filter((item) => item._id !== card._id));
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -71,37 +87,49 @@ function App() {
 
   // Обновление информации пользователя
   function handleUpdateUser(data) {
+    setIsLoading(true)
     api.updateUserInfo(data)
       .then((res) => {
         setCurrentUser(res)
       })
+      .finally(() => {
+        setIsLoading(false)
+        closeAllPopups()
+      })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-    closeAllPopups()
   }
   // Обновление аватара
   function handleUpdateAvatar(link) {
+    setIsLoading(true)
     api.updateAvatar(link)
       .then((res) => {
         setCurrentUser(res)
       })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-    closeAllPopups()
-  }
-
-  // Добавление новой карточки
-  function handleAddPlaceSubmit(data) {
-    api.addNewCard(data)
-      .then((res) => {
-        setCards([res, ...cards]);
+      .finally(() => {
+        setIsLoading(false)
+        closeAllPopups()
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       });
-    closeAllPopups()
+  }
+
+  // Добавление новой карточки
+  function handleAddPlaceSubmit(data) {
+    setIsLoading(true)
+    api.addNewCard(data)
+      .then((res) => {
+        setCards([res, ...cards]);
+      })
+      .finally(() => {
+        setIsLoading(false)
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
   }
 
   // Переключение Попапов
@@ -142,14 +170,14 @@ function App() {
           <Footer />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-          <EditProfilePopup isOpen={isProfilePopupOpened} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} />
+          <EditProfilePopup isLoading={isLoading} isOpen={isProfilePopupOpened} onUpdateUser={handleUpdateUser} onClose={closeAllPopups} />
 
-          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
+          <EditAvatarPopup isLoading={isLoading} isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
 
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
+          <AddPlacePopup isLoading={isLoading} isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
 
           {/*  popup question */}
-          <PopupWithForm name="question" title="Вы уверены?" onClose={closeAllPopups} buttonText="Да" />
+          <PopupWithForm name="question" isLoading={isLoading} title="Вы уверены?" onClose={closeAllPopups} buttonText="Да" />
         </CurrentUserContext.Provider>
       </div>
     </div >
