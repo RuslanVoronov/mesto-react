@@ -24,17 +24,17 @@ function App() {
 
   useEffect(() => {
     function closeByEscape(evt) {
-      if(evt.key === 'Escape') {
+      if (evt.key === 'Escape') {
         closeAllPopups();
       }
     }
-    if(isOpen) { // навешиваем только при открытии
+    if (isOpen) { // навешиваем только при открытии
       document.addEventListener('keydown', closeByEscape);
       return () => {
         document.removeEventListener('keydown', closeByEscape);
       }
     }
-  }, [isOpen]) 
+  }, [isOpen])
 
 
   // Запрс карточек
@@ -91,13 +91,13 @@ function App() {
     api.updateUserInfo(data)
       .then((res) => {
         setCurrentUser(res)
-      })
-      .finally(() => {
-        setIsLoading(false)
         closeAllPopups()
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        setIsLoading(false)
       });
   }
   // Обновление аватара
@@ -106,13 +106,13 @@ function App() {
     api.updateAvatar(link)
       .then((res) => {
         setCurrentUser(res)
-      })
-      .finally(() => {
-        setIsLoading(false)
         closeAllPopups()
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        setIsLoading(false)
       });
   }
 
@@ -121,14 +121,14 @@ function App() {
     setIsLoading(true)
     api.addNewCard(data)
       .then((res) => {
-        setCards([res, ...cards]);
-      })
-      .finally(() => {
-        setIsLoading(false)
+        setCards([res, ...cards])
         closeAllPopups()
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        setIsLoading(false)
       });
   }
 
