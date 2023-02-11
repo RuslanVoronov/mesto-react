@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useForm } from "../hooks/useForm";
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
@@ -6,33 +6,18 @@ import PopupWithForm from "./PopupWithForm";
 function EditProfilePopup(props) {
 
     const currentUser = React.useContext(CurrentUserContext);
-    const [name, setName] = useState(currentUser.name)
-    const [description, setDescription] = useState(currentUser.description)
 
     React.useEffect(() => {
-        setName(currentUser.name);
-        setDescription(currentUser.about);
+        setValues(currentUser)
     }, [currentUser, props.isOpen]);
 
+    const { values, handleChange, setValues } = useForm({})
 
     function handleSubmit(e) {
         e.preventDefault();
-
         // Передаём значения управляемых компонентов во внешний обработчик
-        props.onUpdateUser({
-            name,
-            about: description,
-        });
+        props.onUpdateUser(values);
     }
-
-    function handleChangeName(e) {
-        setName(e.target.value)
-    }
-
-    function handleChangeDescription(e) {
-        setDescription(e.target.value)
-    }
-
 
     return (
         <PopupWithForm
@@ -42,11 +27,11 @@ function EditProfilePopup(props) {
             isOpen={props.isOpen}
             onSubmit={handleSubmit} >
 
-            <input className="popup__input popup__input_type_name" value={name || ''} onChange={handleChangeName} id="name" name="name" minLength="2"
+            <input className="popup__input popup__input_type_name" value={values.name || ''} onChange={handleChange} id="name" name="name" minLength="2"
                 maxLength="40" placeholder="Имя" required />
             <span className="popup__error" id="name-error"></span>
 
-            <input className="popup__input popup__input_type_job" value={description || ''} onChange={handleChangeDescription} id="job" name="about" minLength="2"
+            <input className="popup__input popup__input_type_job" value={values.about || ''} onChange={handleChange} id="job" name="about" minLength="2"
                 maxLength="200" placeholder="Род деятельности" required />
             <span className="popup__error" id="job-error"></span>
 
